@@ -15,22 +15,25 @@ This is a demo project showing how to deploy a **WordPress website** on **Kubern
 ---
 
 ## Architecture
-   +-----------------+
-   |   LoadBalancer  |
-   +--------+--------+
-            |
-     +------v------+
-     | WordPress   |
-     | Pod(s)      |
-     +------+------+
-            |
-       +----v----+
-       | EFS PV  |
-       +----+----+
-            |
-     +------v------+
-     |   MySQL Pod |
-     +-------------+
+   [Client Browser]
+       |
+       v
+[AWS LoadBalancer]  <-- External HTTP requests
+       |
+       v
+[WordPress Service (K8s LoadBalancer Service)]  
+       |   (ClusterIP inside cluster, forwards to pods)
+       v
+[WordPress Pod(s)]
+       |        \
+       |         \
+       v          \
+[AWS EFS Volume]   [MySQL Service (ClusterIP)]
+(WordPress files)  |
+                   v
+               [MySQL Pod]
+             (Database storage)
+    
 
      
 ---
